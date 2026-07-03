@@ -1,0 +1,14 @@
+{
+  "name": "cfr-tracker",
+  "version": "1.0.0",
+  "description": "CFR Train Delay Tracker and Refund Generator",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter @cfr-tracker/web --filter @cfr-tracker/api run dev",
+    "build": "pnpm -r build",
+    "db:generate": "pnpm --filter @cfr-tracker/db run generate",
+    "db:migrate": "pnpm --filter @cfr-tracker/db run migrate",
+    "db:studio": "pnpm --filter @cfr-tracker/db run studio"
+  },
+  "packageManager": "pnpm@9.0.0"
+}

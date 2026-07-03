@@ -1,0 +1,23 @@
+{
+  "name": "@cfr-tracker/db",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "generate": "drizzle-kit generate",
+    "migrate": "drizzle-kit migrate",
+    "studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.45.2",
+    "postgres": "^3.4.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "drizzle-kit": "^0.31.10",
+    "tsx": "^4.7.2",
+    "typescript": "^5.4.5"
+  }
+}
