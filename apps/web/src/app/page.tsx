@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3002";
+
 export default function Home() {
   const router = useRouter();
   const [trainNumber, setTrainNumber] = useState("");
@@ -63,7 +65,7 @@ export default function Home() {
 
   useEffect(() => {
     // Check DB status via API
-    fetch("http://localhost:3002/health")
+    fetch(`${API_BASE_URL}/health`)
       .then((res) => res.json())
       .then((data) => {
         if (data.status === "ok") {
@@ -78,7 +80,7 @@ export default function Home() {
       });
 
     // Fetch registered trains for autocomplete
-    fetch("http://localhost:3002/api/trains")
+    fetch(`${API_BASE_URL}/api/trains`)
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
@@ -96,7 +98,7 @@ export default function Home() {
       .catch((err) => console.error("Failed to load registered trains for autocomplete", err));
 
     // Fetch unique dates where we already have trains saved
-    fetch("http://localhost:3002/api/available-dates")
+    fetch(`${API_BASE_URL}/api/available-dates`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success && Array.isArray(data.dates)) {

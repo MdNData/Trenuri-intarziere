@@ -9,9 +9,10 @@ import { saveScrapedTrain } from './services/trainService.js'
 import { startWorker } from './worker.js'
 
 const app = new Hono()
+const corsOrigin = process.env.CORS_ORIGIN || 'http://localhost:3003'
 
 app.use('*', cors({
-  origin: ['http://localhost:3003'],
+  origin: [corsOrigin],
 }))
 
 // === Health ===
@@ -207,9 +208,10 @@ app.get('/api/available-dates', async (c) => {
 })
 
 // === Start Server ===
-const port = 3002
-serve({ fetch: app.fetch, port })
-console.log(`[API] CFR Tracker running on http://localhost:${port}`)
+const port = Number(process.env.PORT || 3002)
+const host = process.env.HOST || '0.0.0.0'
+serve({ fetch: app.fetch, port, hostname: host })
+console.log(`[API] CFR Tracker running on http://${host}:${port}`)
 
 // === Start Scraper Worker ===
 startWorker()

@@ -107,6 +107,8 @@ function getOperatorInfo(trainNumber: string): OperatorInfo {
   };
 }
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3002";
+
 export default function TrainDetail({ params }: { params: Promise<Params> }) {
   const resolvedParams = use(params);
   const { trainNumber, date } = resolvedParams;
@@ -290,11 +292,11 @@ export default function TrainDetail({ params }: { params: Promise<Params> }) {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`http://localhost:3002/api/trains/${trainNumber}/${date}`);
+      const res = await fetch(`${API_BASE_URL}/api/trains/${trainNumber}/${date}`);
       if (res.status === 404) {
         // Automatically trigger live scrape from CFR
         setScraping(true);
-        const scrapeRes = await fetch("http://localhost:3002/api/scrape", {
+        const scrapeRes = await fetch(`${API_BASE_URL}/api/scrape`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ trainNumber, date }),
@@ -302,7 +304,7 @@ export default function TrainDetail({ params }: { params: Promise<Params> }) {
         const scrapeData = await scrapeRes.json();
         if (scrapeData.success) {
           // Retry fetching the newly saved train
-          const resRetry = await fetch(`http://localhost:3002/api/trains/${trainNumber}/${date}`);
+          const resRetry = await fetch(`${API_BASE_URL}/api/trains/${trainNumber}/${date}`);
           if (resRetry.ok) {
             const data = await resRetry.json();
             setTrain(data);

@@ -1,0 +1,34 @@
+name: Deploy API to server
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'apps/api/**'
+      - 'packages/db/**'
+      - '.github/workflows/deploy-api.yml'
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build API image
+        run: docker build -t trenuri-intarziere-api -f apps/api/Dockerfile .
+
+      - name: Remove old API container
+        run: docker rm -f trenuri-intarziere-api-container || true
+
+      - name: Run API container
+        run: |
+          docker run -d \
+            --name trenuri-intarziere-api-container \
+            --network host \
+            -e PORT=3002 \
+            -e HOST=0.0.0.0 \
+            -e CORS_ORIGIN=${{ secrets.CORS_ORIGIN }} \
+            -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
+            trenuri-intarziere-api
